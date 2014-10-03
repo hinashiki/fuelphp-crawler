@@ -10,6 +10,7 @@
 
 Autoloader::add_namespace('Crawler', __DIR__.'/classes/');
 Autoloader::add_core_namespace('Crawler');
+require __DIR__.'/vendor/simple_html_dom.php';
 
 Autoloader::add_classes(array(
 	/**
