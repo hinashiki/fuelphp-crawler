@@ -5,6 +5,8 @@ class Crawler
 
 	public function run()
 	{
-		\Cli::write(\Cli::color('this is a test', 'light_blue'));
+		\Cli::write(\Cli::color('this is a test. get yahoo.co.jp', 'light_blue'));
+		$html = Crawler\Crawl::curl('http://www.yahoo.co.jp');
+		\Cli::write($html->plaintext);
 	}
 }

@@ -3,12 +3,12 @@
  * for crawling
  *
  */
+namespace Crawler;
 class Crawl
 {
 	const USLEEP_TIME = 800000; // 0.8sec
 	const USLEEP_TIME_WITH_PROXY = 400000; // 0.4sec
 	const DUMMY_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)';
-	const GET_PROXY_APP_KEY = '';
 	private static $__proxy_list = array();
 	private static $__current_proxy_num = 0;
 	private static $__last_proxy_get_date = 0;
@@ -28,6 +28,14 @@ class Crawl
 	private static $__refresh_cnt = 0;
 
 	/**
+	 * Init, config loading.
+	 */
+	public static function _init()
+	{
+		\Config::load('crawler', true);
+	}
+
+	/**
 	 * access and return parsed html object
 	 *
 	 * @param string $uri
@@ -38,7 +46,7 @@ class Crawl
 	 */
 	public static function curl($uri, $use_proxy = false, $refresh = false)
 	{
-		$curl = Request::forge($uri, 'curl')
+		$curl = \Request::forge($uri, 'curl')
 		        ->set_method('get')
 		        ->set_option(CURLOPT_TIMEOUT, 10)
 		        ->set_option(CURLOPT_USERAGENT, self::DUMMY_AGENT);
@@ -143,12 +151,12 @@ class Crawl
 			return self::$__proxy_list;
 		}
 		$list = array();
-		$url = 'http://www.getproxy.jp/proxyapi?ApiKey='.self::GET_PROXY_APP_KEY.'&area=JP&sort=requesttime&orderby=asc';
-		$curl = Request::forge($url, 'curl')
+		$url = 'http://www.getproxy.jp/proxyapi?ApiKey='.\Config::get('crawler.get_proxy.app_key').'&area=JP&sort=requesttime&orderby=asc';
+		$curl = \Request::forge($url, 'curl')
 		        ->set_method('get')
 		        ->set_option(CURLOPT_TIMEOUT, 60)
 		        ->execute();
-		$xml = Format::forge($curl->response()->body, 'xml')->to_array();
+		$xml = \Format::forge($curl->response()->body, 'xml')->to_array();
 		if( ! isset($xml['errorinfo']) and count($xml) > 1)
 		{
 			foreach($xml['item'] as $proxy)

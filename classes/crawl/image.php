@@ -1,8 +1,5 @@
 <?php
-/**
- * get image from outside
- *
- */
+namespace Crawler;
 class Crawl_Image extends \Crawl
 {
 	// request_type page or image
