@@ -80,7 +80,7 @@ class Crawl
 			$result = $curl->response()->body;
 			if(static::$_request_type === 'page')
 			{
-				$result = str_get_html($result);
+				$result = \str_get_html($result);
 				if(preg_match('/アクセスが?制限/', $result->find('title', 0)->plaintext))
 				{
 					// access restrict occured. retry use other proxy
