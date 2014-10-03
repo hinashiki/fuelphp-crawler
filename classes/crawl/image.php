@@ -7,7 +7,7 @@ class Crawl_Image extends \Crawl
 
 	public static function get($uri)
 	{
-		$binary = self::curl($uri, true);
+		$binary = self::curl($uri);
 		$return = static::$_return_headers;
 		$return['body'] = $binary;
 		return $return;
