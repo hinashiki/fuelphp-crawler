@@ -74,10 +74,12 @@ class Crawl
 		if($use_proxy)
 		{
 			$proxy_list = static::_get_proxy();
-			self::$__current_proxy_num = rand(0, (count($proxy_list) - 1));
-			$proxy = $proxy_list[self::$__current_proxy_num];
-			$curl->set_option(CURLOPT_PROXY, $proxy);
-
+			if( ! empty($proxy_list))
+			{
+				self::$__current_proxy_num = rand(0, (count($proxy_list) - 1));
+				$proxy = $proxy_list[self::$__current_proxy_num];
+				$curl->set_option(CURLOPT_PROXY, $proxy);
+			}
 			// for loop use if not refresh
 			if( ! $refresh)
 			{
@@ -129,7 +131,7 @@ class Crawl
 			{
 				\Log::warning(__METHOD__.': retry execute. now cnt='.self::$__retry_cnt);
 				// おそらくタイムアウトになったであろうproxyは時間短縮のため再利用しない
-				if($use_proxy)
+				if($use_proxy and ! empty($use_porxy))
 				{
 					unset(self::$__proxy_list[self::$__current_proxy_num]);
 					// array key reset
@@ -189,6 +191,10 @@ class Crawl
 		$list = array_merge($list, \Config::get('crawler.custom_proxies'));
 		self::$__proxy_list = $list;
 		self::$__last_proxy_get_date = strtotime('now');
+		if(empty($list))
+		{
+			\Log::info(__METHOD__.': can\'t get any proxies');
+		}
 		return $list;
 	}
 
@@ -198,6 +204,10 @@ class Crawl
 	 */
 	protected static function _get_last_use_proxy()
 	{
+		if(empty(self::$__proxy_list))
+		{
+			return null;
+		}
 		return self::$__proxy_list[self::$__current_proxy_num];
 	}
 }
