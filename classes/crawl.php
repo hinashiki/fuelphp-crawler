@@ -19,6 +19,15 @@ class Crawl
 	// request_type page or image
 	protected static $_request_type = 'page';
 
+	// request_method get or post
+	protected static $_request_method = 'get';
+
+	// request headers
+	protected static $_request_headers = array();
+
+	// request body
+	protected static $_request_body = array();
+
 	// リトライ機構
 	const RETRY_MAX_CNT = 7;
 	private static $__retry_cnt = 0;
@@ -47,12 +56,20 @@ class Crawl
 	public static function curl($uri, $use_proxy = false, $refresh = false)
 	{
 		$curl = \Request::forge($uri, 'curl')
-		        ->set_method('get')
+		        ->set_method(static::$_request_method)
 		        ->set_option(CURLOPT_TIMEOUT, 10)
 		        ->set_option(CURLOPT_USERAGENT, self::DUMMY_AGENT);
+		foreach(static::$_request_headers as $header => $content)
+		{
+			$curl->set_header($header, $content);
+		}
 		if(static::$_request_type === 'image')
 		{
 			$curl->set_option(CURLOPT_RETURNTRANSFER, 1);
+		}
+		if( ! empty(static::$_request_body))
+		{
+			$curl->set_params(static::$_request_body);
 		}
 		if($use_proxy)
 		{
