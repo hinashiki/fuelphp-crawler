@@ -168,6 +168,8 @@ class Crawl
 				}
 			}
 		}
+		// merge custom proxies
+		$list = array_merge($list, \Config::get('crawler.custom_proxies'));
 		self::$__proxy_list = $list;
 		self::$__last_proxy_get_date = strtotime('now');
 		return $list;
