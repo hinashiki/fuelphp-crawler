@@ -136,7 +136,7 @@ class Crawl
 	}
 
 	/**
-	 * 野良proxyリストの取得
+	 * proxyリストの取得
 	 *
 	 * @return array
 	 */
@@ -151,17 +151,21 @@ class Crawl
 			return self::$__proxy_list;
 		}
 		$list = array();
-		$url = 'http://www.getproxy.jp/proxyapi?ApiKey='.\Config::get('crawler.get_proxy.app_key').'&area=JP&sort=requesttime&orderby=asc';
-		$curl = \Request::forge($url, 'curl')
-		        ->set_method('get')
-		        ->set_option(CURLOPT_TIMEOUT, 60)
-		        ->execute();
-		$xml = \Format::forge($curl->response()->body, 'xml')->to_array();
-		if( ! isset($xml['errorinfo']) and count($xml) > 1)
+		// 野良プロキシの取得
+		if( ! empty(\Config::get('crawler.get_proxy.app_key')))
 		{
-			foreach($xml['item'] as $proxy)
+			$url = 'http://www.getproxy.jp/proxyapi?ApiKey='.\Config::get('crawler.get_proxy.app_key').'&area=JP&sort=requesttime&orderby=asc';
+			$curl = \Request::forge($url, 'curl')
+			        ->set_method('get')
+			        ->set_option(CURLOPT_TIMEOUT, 60)
+			        ->execute();
+			$xml = \Format::forge($curl->response()->body, 'xml')->to_array();
+			if( ! isset($xml['errorinfo']) and count($xml) > 1)
 			{
-				$list[] = $proxy['ip'];
+				foreach($xml['item'] as $proxy)
+				{
+					$list[] = $proxy['ip'];
+				}
 			}
 		}
 		self::$__proxy_list = $list;
