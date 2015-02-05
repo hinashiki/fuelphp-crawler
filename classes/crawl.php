@@ -81,7 +81,12 @@ class Crawl
 				$curl->set_option(CURLOPT_PROXY, $proxy);
 			}
 			// for loop use if not refresh
-			if( ! $refresh)
+			if( empty($proxy_list))
+			{
+				// for loop use
+				usleep(self::USLEEP_TIME);
+			}
+			elseif( ! $refresh)
 			{
 				usleep(self::USLEEP_TIME_WITH_PROXY);
 			}
