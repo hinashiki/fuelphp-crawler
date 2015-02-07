@@ -1,6 +1,6 @@
 <?php
 namespace Fuel\Tasks;
-class Crawler
+class Crawler_Sample
 {
 
 	public function run()
