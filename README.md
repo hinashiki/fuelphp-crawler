@@ -17,7 +17,7 @@ return array(
 after setting it, exec oil command, and update composer
 ```
 php oil package install fuelphp-crawler
-php composer.phar -d=fuel/package/fuelphp-crawler update
+php composer.phar -d=fuel/packages/fuelphp-crawler update
 ```
 
 ### From composer
@@ -51,7 +51,7 @@ edit composer.json and add above lines.
 after edit json, exec update composer.
 ```
 php composer.phar update
-php composer.phar -d=fuel/package/fuelphp-crawler update
+php composer.phar -d=fuel/packages/fuelphp-crawler update
 ```
 ## How to use
 write it later...
