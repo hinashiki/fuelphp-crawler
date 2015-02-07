@@ -1,0 +1,17 @@
+{
+	"name": "hinashiki/fuelphp-crawler",
+	"description": "for myown",
+	"type": "fuel-package",
+	"homepage": "https://github.com/hinashiki/fuelphp-crawler",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "hinashiki",
+			"email": "aono@slash-one.com"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0",
+		"simple-html-dom/simple-html-dom": "1.5.0"
+	}
+}
