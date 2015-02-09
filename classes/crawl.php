@@ -16,7 +16,7 @@ class Crawl
 	// return headers
 	protected static $_return_headers = array();
 
-	// request_type page or image
+	// request_type page or image or json
 	protected static $_request_type = 'page';
 
 	// request_method get or post
@@ -119,6 +119,10 @@ class Crawl
 					self::$__refresh_cnt++;
 					return self::curl($uri, $use_proxy, true);
 				}
+			}
+			if(static::$_request_type === 'json')
+			{
+				$result = \Format::forge($result, 'json')->to_array();
 			}
 			// retry, refresh reset
 			self::$__retry_cnt = 0;
