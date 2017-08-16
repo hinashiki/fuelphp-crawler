@@ -6,9 +6,6 @@
 namespace Crawler;
 class Crawl
 {
-	const USLEEP_TIME = 800000; // 0.8sec
-	const USLEEP_TIME_WITH_PROXY = 400000; // 0.4sec
-	const DUMMY_AGENT = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)';
 	private static $__proxy_list = array();
 	private static $__current_proxy_num = 0;
 	private static $__last_proxy_get_date = 0;
@@ -58,7 +55,7 @@ class Crawl
 		$curl = \Request::forge($uri, 'curl')
 		        ->set_method(static::$_request_method)
 		        ->set_option(CURLOPT_TIMEOUT, 10)
-		        ->set_option(CURLOPT_USERAGENT, self::DUMMY_AGENT);
+		        ->set_option(CURLOPT_USERAGENT, \Config::get('crawler.dummy_agent'));
 		foreach(static::$_request_headers as $header => $content)
 		{
 			$curl->set_header($header, $content);
@@ -84,17 +81,17 @@ class Crawl
 			if( empty($proxy_list))
 			{
 				// for loop use
-				usleep(self::USLEEP_TIME);
+				usleep(\Config::get('crawler.usleep_time'));
 			}
 			elseif( ! $refresh)
 			{
-				usleep(self::USLEEP_TIME_WITH_PROXY);
+				usleep(\Config::get('crawler.usleep_time_with_proxy'));
 			}
 		}
 		elseif( ! $refresh)
 		{
 			// for loop use
-			usleep(self::USLEEP_TIME);
+			usleep(\Config::get('crawler.usleep_time'));
 		}
 
 		try
