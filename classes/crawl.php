@@ -47,11 +47,17 @@ class Crawl
 	 * @param string $uri
 	 *        bool   $use_proxy
 	 *        bool   $refresh
+	 *        bool   $retry
 	 * @return mixed simple_html_dom
 	 *               string
 	 */
-	public static function curl($uri, $use_proxy = false, $refresh = false)
+	public static function curl($uri, $use_proxy = false, $refresh = false, $retry = false)
 	{
+		if( ! $retry)
+		{
+			self::$__retry_cnt = 0;
+			self::$__refresh_cnt = 0;
+		}
 		$curl = \Request::forge($uri, 'curl')
 		        ->set_method(static::$_request_method)
 		        ->set_option(CURLOPT_TIMEOUT, 10)
@@ -143,7 +149,7 @@ class Crawl
 					// array key reset
 					self::$__proxy_list = array_values(self::$__proxy_list);
 				}
-				return self::curl($uri, $use_proxy);
+				return self::curl($uri, $use_proxy, false, true);
 			}
 			// retry回数が一定以上に達したら終了
 			throw new \RequestException($e->getMessage(), $e->getCode());
